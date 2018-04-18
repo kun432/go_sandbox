@@ -1,3 +1,8 @@
+// TODO
+// - 同時実行数の制御
+// - 結果の表示
+// - ネイティブにping実行
+
 package main
 
 import (
@@ -39,11 +44,6 @@ func main() {
 		iplist = append(iplist, line)
 	}
 
-	// カウンタ初期化
-	//cnt_total := len(iplist)
-	//cnt_success := 0
-	//cnt_fail := 0
-
 	// ping実行
 	var wg sync.WaitGroup
 	for _, ip := range iplist {
@@ -54,9 +54,6 @@ func main() {
 		}(ip)
 	}
 	wg.Wait()
-
-	// 結果出力
-	//fmt.Printf("%d件中、%d成功しました\n", cnt_total, cnt_success)
 }
 
 func usage() {
