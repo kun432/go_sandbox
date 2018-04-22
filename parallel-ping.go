@@ -61,7 +61,7 @@ func usage() {
 }
 
 func worker(ip string) {
-	err := exec.Command("ping", "-c", "1", "-W", "2", ip).Run()
+	err := exec.Command("ping", "-c", "1", "-W", "1", ip).Run()
 
 	if err != nil {
 		fmt.Println(ip, " : NG")
