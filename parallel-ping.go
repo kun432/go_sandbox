@@ -10,13 +10,13 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"runtime"
 	"sync"
 )
 
 func main() {
 	// 引数処理
 	args := os.Args
-	fmt.Println(args)
 	if len(args[1:]) != 1 {
 		fmt.Println("Error! irregal arguments.")
 		usage()
@@ -46,18 +46,22 @@ func main() {
 
 	// ping実行
 	var wg sync.WaitGroup
+	cpus := runtime.NumCPU()
+	c := make(chan int, cpus)
 	for _, ip := range iplist {
 		wg.Add(1)
 		go func(ip string) {
 			defer wg.Done()
+			c <- 1
 			worker(ip)
+			<-c
 		}(ip)
 	}
 	wg.Wait()
 }
 
 func usage() {
-	fmt.Println("[Usage] expingo IP_LIST_FILE")
+	fmt.Println("[Usage] parallel-ping IP_LIST_FILE")
 }
 
 func worker(ip string) {
